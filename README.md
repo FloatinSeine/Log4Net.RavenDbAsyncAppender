@@ -28,14 +28,14 @@ The following section provides Sample configuration section.
   </connectionStrings>
 
   <log4net>
-    <appender name="RavenDbBufferedAsyncAppender" type="Log4Net.AsyncAppender.RavenDbBufferedAsyncAppender, Log4Net.AsyncAppender">
+    <appender name="RavenAppender" type="Log4Net.RavenDbAsyncAppender.RavenDbBufferedAsyncAppender, Log4Net.RavenDbAsyncAppender">
       <bufferSize value="100" />
       <connectionString value="ApplicationLogs" />
       <slidingFlush value="60" />
     </appender>
 
     <root>
-      <appender-ref ref="RavenDbBufferedAsyncAppender" />
+      <appender-ref ref="RavenAppender" />
     </root>
   </log4net>
 ```
