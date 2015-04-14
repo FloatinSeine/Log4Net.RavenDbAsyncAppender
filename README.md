@@ -10,7 +10,7 @@ In addition to the standard BufferedAppenderSkeleton properties the following up
 
 ConnectionString the name of the connection string to use to connect to the RavenDB server
 
-SlidingFlush the number of seconds to wait until the next automatic flush occurs after the last Buffer Flush. If set to 0 then no timeer is created.
+SlidingFlush the number of seconds to wait until the next automatic flush occurs after the last Buffer Flush. If set to 0 then no timer is created.
 
 BufferSize is used to change the default requests that is used on a IDocumentSession.
 
