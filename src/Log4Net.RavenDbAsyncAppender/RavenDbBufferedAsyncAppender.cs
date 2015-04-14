@@ -45,15 +45,17 @@ namespace Log4Net.RavenDbAsyncAppender
         {
             base.ActivateOptions();
             _logEventStore = new LogEventStore(ConnectionString) { ErrorHandler = ErrorHandler };
-            _timer = new Timer() { Enabled = true, AutoReset = true };
-            SetTimerInterval();
-            _timer.Elapsed += OnElapsedCheckSlidingExpiration;
 
             if (BufferSize > 0) _logEventStore.MaxNumberOfRequestsPerSession = BufferSize;
-            if (SlidingFlush == 0) SlidingFlush = 60;
+            if (SlidingFlush > 0)
+            {
+                _timer = new Timer() { Enabled = true, AutoReset = true };
+                SetTimerInterval();
+                _timer.Elapsed += OnElapsedCheckSlidingExpiration;
+                _timer.Start();
+            }
             Fix = FixFlags.Partial;
             _readyToUse = true;
-            _timer.Start();
         }
 
         protected override void OnClose()
@@ -62,9 +64,12 @@ namespace Log4Net.RavenDbAsyncAppender
             _shuttingDown = true;
             Task.WaitAll(_activeTasks.ToArray());
             _logEventStore.Dispose();
-            _timer.Enabled = false;
-            _timer.AutoReset = false;
-            _timer.Stop();
+            if (_timer != null)
+            {
+                _timer.Enabled = false;
+                _timer.AutoReset = false;
+                _timer.Stop();
+            }
             base.OnClose();
         }
 
